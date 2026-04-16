@@ -1,0 +1,28 @@
+fun main() {
+    println("set-Inmutable")
+    val numeros=setOf(1,2,3,4,8,4,1,3)
+    println("numero set: ${numeros}")
+    println("Operaciones de conjutos")
+    val pares = setOf(2,4,6,8,10)
+    val multiplos3 = setOf(3,6,9,12)
+    println("pares ser: ${pares}")
+    println ("multiplos3 set: ${multiplos3}")
+    println("union: ${multiplos3}")
+    println("interseccion: ${pares intersect multiplos3}")
+    println("subsraaaccion: ${pares subtract multiplos3}")
+    println("pares set: ${pares}")
+    println("multiplos3 set: ${multiplos3}")
+    
+    println("set-mutable")
+    val tags= mutableSetOf("Kotlin","java", "rectnative")
+    println(tags)
+    tags.add("kotlin")
+    println(tags)
+    tags.add("javascript")
+    println(tags)
+    tags.remove("java")
+    println(tags)
+    println("Verificar si elemento existe ${"kotlin" in tags}")
+    println("verificaar si elemento existe ${"java" in tags}")
+    
+}
