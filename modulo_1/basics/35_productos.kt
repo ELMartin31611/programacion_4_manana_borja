@@ -49,6 +49,11 @@ fun main() {
     CatalogoProductos.agregarProducto("Mouse inalámbrico",  29.99,  0, 1)
     CatalogoProductos.agregarProducto("Monitor 27\"",      349.99,  5, 2)
     CatalogoProductos.agregarProducto("Auriculares BT",    149.99,  8, 3)
+    CatalogoProductos.agregarProducto("Monitor 50\"",      549.99,  5, 2)
+    CatalogoProductos.agregarProducto("Auriculares magic",    249.99,  8, 3)
+    CatalogoProductos.agregarProducto("Monitor 45\"",      449.99,  5, 2)
+   
+
 
     println("=== Todos los productos ===")
     CatalogoProductos.listar().forEach { p ->
@@ -60,4 +65,13 @@ fun main() {
     CatalogoProductos.disponibles()
         .map { it.aplicarDescuento(10.0) }
         .forEach { println("  ${it.nombre}: ${"%.2f".format(it.precio)}") }
+
+
+     /* for (producto in CatalogoProductos.disponibles()) {
+        val conDescuento = producto.aplicarDescuento(10.0)
+        println("  ${conDescuento.nombre}: ${"%.2f".format(conDescuento.precio)}")
+    } */
 }
+
+
+
