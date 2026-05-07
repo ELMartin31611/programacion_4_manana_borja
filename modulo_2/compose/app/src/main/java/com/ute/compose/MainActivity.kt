@@ -29,12 +29,13 @@ class MainActivity : ComponentActivity() {
 
                 // Componentes material 3:
                 //Paso01TextFieldScreen()
-                Paso01SumaScreen()
+                //Paso01SumaScreen()
                 // Paso02CardScreen()
+                // Paso01TiendaScreen()
                 // Paso03LazyColumnScreen()
                 // Paso04ScaffoldScreen()
                 // Paso05NavBarScreen()
-                // Paso06DialogosScreen()
+                 Paso06DialogosScreen()
             }
         }
     }
