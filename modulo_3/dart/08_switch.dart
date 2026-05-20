@@ -63,4 +63,23 @@ void main() {
   };
 
   print(alerta);  // 🔴 FIEBRE ALTA — consulte médico
+
+
+
+  Object respuestaApi = {'id': 1, 'nombre': 'Teclado', 'precio': 89.99};
+
+  String resultado = switch (respuestaApi) {
+    Map<String, dynamic> m when m.containsKey('error') =>
+        'Error: ${m['error']}',
+    Map<String, dynamic> m =>
+        'Producto: ${m['nombre']} — \$${m['precio']}',
+    List<dynamic> lista =>
+        '${lista.length} elementos en la lista',
+    String texto =>
+        'Texto recibido: $texto',
+    _ =>
+        'Respuesta desconocida',
+  };
+
+  print(resultado);  // Producto: Teclado - 89.99
 }
