@@ -37,5 +37,5 @@ interface UserApi {
 
     @GET("users/stats/")
     suspend fun getStats(): Response<UserStatsDto>
-} com.shopapp.data.remote.api
+}
 

@@ -1,64 +1,83 @@
-// data/remote/dto/UserDto.kt
+// data/remote/dto/ProductDto.kt
 package com.shopapp.data.remote.dto
 
 import com.google.gson.annotations.SerializedName
-import com.shopapp.domain.model.User
-import com.shopapp.domain.model.UserPayload
+import com.shopapp.domain.model.Product
+import com.shopapp.domain.model.ProductPayload
 
-data class UserDto(
-    val id:         Int,
-    val username:   String,
-    val email:      String,
-    @SerializedName("first_name")  val firstName:  String,
-    @SerializedName("last_name")   val lastName:   String,
-    @SerializedName("is_staff")    val isStaff:    Boolean,
-    @SerializedName("is_active")   val isActive:   Boolean,
-    @SerializedName("date_joined") val dateJoined: String,
-    @SerializedName("num_orders")  val numOrders:  Int,
+data class CategorySummaryDto(
+    val id:   Int,
+    val name: String,
 )
 
-data class UserRequestDto(
-    val username:   String,
-    val email:      String,
-    @SerializedName("first_name") val firstName: String,
-    @SerializedName("last_name")  val lastName:  String,
-    @SerializedName("is_staff")   val isStaff:   Boolean,
-    @SerializedName("is_active")  val isActive:  Boolean,
-    val password:   String? = null,
-)
-
-data class ToggleActiveResponseDto(
-    val message:   String,
+data class ProductDto(
+    val id:          Int,
+    val name:        String,
+    val description: String,
+    val price:       String,          // Django devuelve Decimal como String
+    @SerializedName("price_with_tax") val priceWithTax: Double,
+    val stock:       Int,
+    @SerializedName("in_stock")  val inStock:  Boolean,
     @SerializedName("is_active") val isActive: Boolean,
+    val image:       String?,
+    @SerializedName("image_url") val imageUrl: String?,
+    val category:    CategorySummaryDto?,
+    @SerializedName("created_at") val createdAt: String,
+    @SerializedName("updated_at") val updatedAt: String,
 )
 
-data class UserStatsDto(
-    val total:    Int,
-    val active:   Int,
-    val inactive: Int,
-    val staff:    Int,
+data class ProductRequestDto(
+    val name:        String,
+    val description: String,
+    val price:       Double,
+    val stock:       Int,
+    @SerializedName("is_active")   val isActive:   Boolean,
+    @SerializedName("category_id") val categoryId: Int,
+)
+
+data class ProductStatsDto(
+    @SerializedName("total_active")   val totalActive:   Int,
+    @SerializedName("total_inactive") val totalInactive: Int,
+    @SerializedName("avg_price")      val avgPrice:      Double?,
+    @SerializedName("max_price")      val maxPrice:      Double?,
+    @SerializedName("min_price")      val minPrice:      Double?,
+    @SerializedName("total_stock")    val totalStock:    Int?,
+    @SerializedName("out_of_stock")   val outOfStock:    Int,
+)
+
+data class RestockResponseDto(
+    val id:          Int,
+    val name:        String,
+    @SerializedName("new_stock") val newStock: Int,
+)
+
+data class RestockRequestDto(
+    val quantity: Int,
 )
 
 // ── Mappers ───────────────────────────────────────────────────
 
-fun UserDto.toDomain() = User(
-    id         = id,
-    username   = username,
-    email      = email,
-    firstName  = firstName,
-    lastName   = lastName,
-    isStaff    = isStaff,
-    isActive   = isActive,
-    dateJoined = dateJoined,
-    numOrders  = numOrders,
+fun ProductDto.toDomain() = Product(
+    id           = id,
+    name         = name,
+    description  = description,
+    price        = price.toDoubleOrNull() ?: 0.0,
+    priceWithTax = priceWithTax,
+    stock        = stock,
+    inStock      = inStock,
+    isActive     = isActive,
+    imageUrl     = imageUrl,
+    categoryId   = category?.id,
+    categoryName = category?.name,
+    createdAt    = createdAt,
+    updatedAt    = updatedAt,
 )
 
-fun UserPayload.toRequest() = UserRequestDto(
-    username  = username,
-    email     = email,
-    firstName = firstName,
-    lastName  = lastName,
-    isStaff   = isStaff,
-    isActive  = isActive,
-    password  = password,
+fun ProductPayload.toRequest() = ProductRequestDto(
+    name        = name,
+    description = description,
+    price       = price,
+    stock       = stock,
+    isActive    = isActive,
+    categoryId  = categoryId,
 )
