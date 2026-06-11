@@ -74,6 +74,11 @@ class UserRepositoryImpl @Inject constructor(
             )
         } else error("Error ${response.code()}")
     }
+    override suspend fun getProfile(): Result<User> = runCatching {
+        val response = api.getProfile()
+        if (response.isSuccessful) response.body()!!.toDomain()
+        else error(response.errorBody()?.string() ?: "Error ${response.code()}")
+    }
 
     override suspend fun uploadAvatar(uri: Uri): Result<String> = runCatching {
         val part     = uri.toMultipart(context, fieldName = "avatar")
