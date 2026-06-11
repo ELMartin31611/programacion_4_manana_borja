@@ -21,4 +21,5 @@ interface UserRepository {
     suspend fun getStats(): Result<Map<String, Int>>
     suspend fun uploadAvatar(uri: Uri): Result<String>
 
+    suspend fun getProfile(): Result<User>
 }
