@@ -210,6 +210,7 @@ fun NavGraph(
                 )
             }
 
+
             // ── PROFILE ────────────────────────────
             composable(Screen.Profile.route) {
                 if (!isAuthenticated) {
@@ -221,12 +222,17 @@ fun NavGraph(
                 } else {
                     ProfileScreen(
                         authViewModel = authViewModel,
+
                         onLogout = {
                             authViewModel.logout()
                             navController.navigate(Screen.Login.route) {
                                 popUpTo(0) { inclusive = true }
                             }
                         },
+
+                        onSendNotification = {
+                            navController.navigate(Screen.SendNotification.route)
+                        }
                     )
                 }
             }

@@ -13,7 +13,6 @@ data class ForgotPasswordUiState(
     val emailSent: Boolean = false,
     val error:     String? = null,
 )
-
 @HiltViewModel
 class ForgotPasswordViewModel @Inject constructor(
     private val repository: AuthRepository,

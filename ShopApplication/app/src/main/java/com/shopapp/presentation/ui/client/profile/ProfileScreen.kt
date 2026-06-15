@@ -28,7 +28,6 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
     authViewModel: AuthViewModel,
 ) {
-
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -50,7 +49,6 @@ fun ProfileScreen(
     ) { padding ->
 
         when {
-
             state.isLoading -> {
                 Box(
                     modifier = Modifier
@@ -73,16 +71,14 @@ fun ProfileScreen(
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Text(
-                            state.error ?: "Error",
+                            text = state.error ?: "Error",
                             color = MaterialTheme.colorScheme.error,
                         )
 
                         Spacer(Modifier.height(8.dp))
 
                         Button(
-                            onClick = {
-                                viewModel.loadProfile()
-                            }
+                            onClick = { viewModel.loadProfile() }
                         ) {
                             Text("Reintentar")
                         }
@@ -91,7 +87,6 @@ fun ProfileScreen(
             }
 
             else -> {
-
                 val profile = state.profile
 
                 Column(
@@ -100,10 +95,8 @@ fun ProfileScreen(
                         .padding(padding)
                         .verticalScroll(rememberScrollState())
                         .padding(horizontal = 16.dp),
-
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-
                     Spacer(Modifier.height(24.dp))
 
                     AvatarSection(
@@ -134,9 +127,7 @@ fun ProfileScreen(
                     if (profile?.isStaff == true) {
                         SuggestionChip(
                             onClick = {},
-                            label = {
-                                Text("Staff")
-                            },
+                            label = { Text("Staff") },
                         )
                     }
 
@@ -151,8 +142,8 @@ fun ProfileScreen(
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         Icon(
-                            Icons.Default.Edit,
-                            null,
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = null,
                             modifier = Modifier.size(18.dp),
                         )
 
@@ -162,7 +153,6 @@ fun ProfileScreen(
                     }
 
                     if (profile?.isStaff == true) {
-
                         Spacer(Modifier.height(8.dp))
 
                         HorizontalDivider()
@@ -170,17 +160,13 @@ fun ProfileScreen(
                         ListItem(
                             headlineContent = {
                                 Text(
-                                    "Enviar notificación",
+                                    text = "Enviar notificación",
                                     fontWeight = FontWeight.Medium,
                                 )
                             },
-
                             supportingContent = {
-                                Text(
-                                    "Envía un correo a uno o todos los usuarios"
-                                )
+                                Text("Envía un correo a uno o todos los usuarios")
                             },
-
                             leadingContent = {
                                 Icon(
                                     imageVector = Icons.Default.Send,
@@ -188,17 +174,15 @@ fun ProfileScreen(
                                     tint = MaterialTheme.colorScheme.primary,
                                 )
                             },
-
                             trailingContent = {
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                                     contentDescription = null,
                                 )
                             },
-
                             modifier = Modifier.clickable {
                                 onSendNotification()
-                            }
+                            },
                         )
 
                         HorizontalDivider()
@@ -214,8 +198,8 @@ fun ProfileScreen(
                         ),
                     ) {
                         Icon(
-                            Icons.AutoMirrored.Filled.Logout,
-                            null,
+                            imageVector = Icons.AutoMirrored.Filled.Logout,
+                            contentDescription = null,
                             modifier = Modifier.size(18.dp),
                         )
 
