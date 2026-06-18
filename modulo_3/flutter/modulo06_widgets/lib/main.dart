@@ -2,6 +2,12 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:modulo06_widgets/widgets/catalogo_basicos.dart';
+import 'widgets/servicio_estado.dart';
+import 'widgets/contador_limitado.dart';
+import 'widgets/reloj.dart';
+import 'screens/pantalla_contexto.dart';
+import 'widgets/indicador.dart';
+
 
 // ┌──────────────────────────────────────────────────────────────────┐
 // │  Cambia este número y guarda (Ctrl+S) para navegar entre pasos. │
@@ -14,16 +20,109 @@ import 'package:modulo06_widgets/widgets/catalogo_basicos.dart';
 // │  7  Paso 5   BuildContext                                        │
 // │  8  Paso 6   Composición de widgets                             │
 // └──────────────────────────────────────────────────────────────────┘
-const int paso = 2;
+
+const int paso = 7;
 
 void main() => runApp(MaterialApp(
   debugShowCheckedModeBanner: false,
-  home: switch (paso) {
-    1 => const Scaffold(body: Center(child: Saludo())),
-    2 => const CatalogoBasicos(),
-    _ => Scaffold(body: Center(child: Text('Paso $paso: crea el widget primero'))),
-  },
-));
+  theme: ThemeData(
+    colorScheme:  ColorScheme.fromSeed(
+      seedColor:  const Color.fromARGB(255, 0, 0, 0),          // ← cambia aquí
+      brightness: Brightness.light,     // ← Brightness.dark para modo oscuro
+    ),
+    useMaterial3: true,
+  ),
+  home: switch (paso) { 
+
+        1 => const Scaffold(
+            body: Center(
+              child: Saludo(),
+            ),
+          ),
+        2 => const CatalogoBasicos(),
+        3 => const Scaffold(
+            body: Center(
+              child: Wrap(
+                spacing: 12,
+                runSpacing: 8,
+                children: [
+                  Etiqueta(texto: 'Activo', color: Colors.green),
+                  Etiqueta(texto: 'Error', color: Colors.red, relleno: true),
+                  Etiqueta(texto: 'En espera', color: Colors.orange),
+                  Etiqueta(
+                    texto: 'Crítico',
+                    color: Colors.red,
+                    fontSize: 16,
+                    relleno: true,
+                  ),
+                  Etiqueta(
+                    texto: 'Info',
+                    color: Colors.blue,
+                    fontSize: 11,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          4 => const Scaffold(
+            body: Center(
+              child: ServicioEstado(nombre: 'nginx-proxy'),
+            ),
+          ),
+          5 => Scaffold(                               // Paso 3b
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ContadorLimitado(
+                    etiqueta: 'Intentos de login',
+                    limite:   3,
+                    color:    Colors.red,
+                    onLimite: () => debugPrint('¡Cuenta bloqueada!'),
+                  ),
+                  const SizedBox(height: 40),
+                  ContadorLimitado(
+                    etiqueta: 'Conexiones activas',
+                    limite:   10,
+                    color:    Colors.indigo,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          6 => Scaffold(                              // Paso 4
+            appBar: AppBar(title: const Text('Cronómetro')),
+            body: const Center(child: Reloj()),
+          ),
+          7 => const PantallaContexto(),
+          8 => Scaffold(                             // Paso 6
+            body: Center(
+              child: Wrap(
+                spacing:    32,
+                runSpacing: 24,
+                alignment:  WrapAlignment.center,
+                children: const [
+                  Indicador(label: 'Servidores activos', valor: '8',
+                            color: Colors.green, icono: Icons.dns),
+                  Indicador(label: 'Alertas críticas',   valor: '2',
+                            color: Colors.red,   icono: Icons.warning_amber,
+                            subtitulo: 'Requieren atención'),
+                  Indicador(label: 'Tráfico',            valor: '4.2 GB',
+                            color: Colors.indigo),
+                  Indicador(label: 'Uptime',             valor: '99.8%',
+                            color: Colors.teal, subtitulo: 'Últimos 30 días'),
+                ],
+              ),
+            ),
+          ),
+        _ => Scaffold(
+            body: Center(
+              child: Text('Paso $paso: crea el widget primero'),
+            ),
+          ),
+      },
+    ));
+
 class Saludo extends StatelessWidget {
   const Saludo({super.key});
 
@@ -36,13 +135,56 @@ class Saludo extends StatelessWidget {
         fontWeight: FontWeight.bold,
         letterSpacing: 4,
         color: Colors.indigo,
-       shadows: [Shadow(color: Colors.black26, blurRadius: 4, offset: Offset(2,2))]
+        shadows: [
+          Shadow(
+            color: Colors.black26,
+            blurRadius: 4,
+            offset: Offset(2, 2),
+          ),
+        ],
       ),
-    
       overflow: TextOverflow.fade,
       maxLines: 2,
       softWrap: false,
-      textAlign: TextAlign.justify
+      textAlign: TextAlign.justify,
     );
   }
-} 
+}
+
+class Etiqueta extends StatelessWidget {
+  final String texto;
+  final Color color;
+  final bool relleno;
+  final double fontSize;
+
+  const Etiqueta({
+    super.key,
+    required this.texto,
+    required this.color,
+    this.relleno = false,
+    this.fontSize = 13,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 12,
+        vertical: 8,
+      ),
+      decoration: BoxDecoration(
+        color: relleno ? color : Colors.transparent,
+        border: Border.all(color: color),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        texto,
+        style: TextStyle(
+          color: relleno ? Colors.white : color,
+          fontSize: fontSize,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+}
