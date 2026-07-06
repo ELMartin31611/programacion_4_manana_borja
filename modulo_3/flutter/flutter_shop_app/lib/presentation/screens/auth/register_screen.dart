@@ -10,6 +10,7 @@ import '../../../domain/model/auth_state.dart';
 import '../../providers/auth_provider.dart';
 import '../../widgets/auth_button.dart';
 
+
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
 
