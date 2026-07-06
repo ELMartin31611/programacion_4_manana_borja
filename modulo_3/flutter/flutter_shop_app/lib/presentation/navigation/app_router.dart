@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_shop_app/presentation/screens/admin/orderdetailscreen.dart';
 import 'package:flutter_shop_app/presentation/screens/cart/cart_screen.dart';
 import 'package:flutter_shop_app/presentation/screens/catalog/productdetailscreen.dart';
 import 'package:go_router/go_router.dart';
@@ -12,6 +13,9 @@ import '../screens/auth/register_screen.dart';
 import '../screens/catalog/catalog_screen.dart';
 import '../screens/catalog/home_screen.dart';
 import 'public_shell.dart';
+import '../screens/orders/orders_screen.dart';
+import '../screens/auth/profile_screen.dart';
+
 
 class _PlaceholderScreen extends ConsumerWidget {
   final String title;
@@ -87,6 +91,20 @@ final routerProvider = Provider<GoRouter>((ref) {
                 },
               ),
             ],
+          ),
+          GoRoute(
+            path: '/orders',
+            builder: (_, __) => const OrdersScreen(),
+          ),
+          GoRoute(
+            path: '/orders/:id',
+            builder: (_, s) => OrderDetailScreen(
+              orderId: int.parse(s.pathParameters['id']!),
+            ),
+          ),
+          GoRoute(
+            path: '/profile',
+            builder: (_, __) => const ProfileScreen(),
           ),
 
           GoRoute(
