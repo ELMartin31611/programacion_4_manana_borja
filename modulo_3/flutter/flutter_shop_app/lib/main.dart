@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_shop_app/domain/repository/categoryrepositoryimpl.dart';
+import 'package:flutter_shop_app/presentation/navigation/app_router.dart';
 import 'core/config/app_config.dart';
 import 'theme/app_theme.dart';
 import 'theme/app_colors.dart';
@@ -14,16 +15,19 @@ Future<void> main() async {
   runApp(const ProviderScope(child: FlutterShopApp()));
 }
 
-class FlutterShopApp extends StatelessWidget {
+class FlutterShopApp extends ConsumerWidget {
   const FlutterShopApp({super.key});
 
   @override
-  Widget build(BuildContext context) => MaterialApp(
-    title:            AppConfig.appName,
-    debugShowCheckedModeBanner: false,
-    theme:            AppTheme.dark,
-    home:             const VerificationScreen(),
-  );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
+    return MaterialApp.router(
+      title:                'Flutter Shop App',
+      debugShowCheckedModeBanner: false,
+      theme:                AppTheme.dark,
+      routerConfig:         router,
+    );
+  }
 }
 
 // Provider de verificación
