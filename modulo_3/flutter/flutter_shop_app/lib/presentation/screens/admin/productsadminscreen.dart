@@ -10,7 +10,6 @@ import '../../../core/utils/formatters.dart';
 import '../../../data/repository/category_repository_impl.dart';
 import '../../../domain/model/category.dart';
 import '../../../domain/model/product.dart';
-
 import '../../widgets/product_form.dart';
 import '../../widgets/restock_dialog.dart';
 
