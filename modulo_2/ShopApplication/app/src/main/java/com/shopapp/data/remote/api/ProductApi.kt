@@ -1,83 +1,48 @@
-// data/remote/dto/ProductDto.kt
-package com.shopapp.data.remote.dto
+package com.shopapp.data.remote.api
 
-import com.google.gson.annotations.SerializedName
-import com.shopapp.domain.model.Product
-import com.shopapp.domain.model.ProductPayload
+import com.shopapp.data.remote.dto.*
+import okhttp3.MultipartBody
+import retrofit2.Response
+import retrofit2.http.*
 
-data class CategorySummaryDto(
-    val id:   Int,
-    val name: String,
-)
+interface ProductApi {
+    @GET("products/")
+    suspend fun getProducts(
+        @QueryMap filters: Map<String, String>,
+    ): Response<PaginatedDto<ProductDto>>
 
-data class ProductDto(
-    val id:          Int,
-    val name:        String,
-    val description: String,
-    val price:       String,          // Django devuelve Decimal como String
-    @SerializedName("price_with_tax") val priceWithTax: Double,
-    val stock:       Int,
-    @SerializedName("in_stock")  val inStock:  Boolean,
-    @SerializedName("is_active") val isActive: Boolean,
-    val image:       String?,
-    @SerializedName("image_url") val imageUrl: String?,
-    val category:    CategorySummaryDto?,
-    @SerializedName("created_at") val createdAt: String,
-    @SerializedName("updated_at") val updatedAt: String,
-)
+    @GET("products/{id}/")
+    suspend fun getProduct(@Path("id") id: Int): Response<ProductDto>
 
-data class ProductRequestDto(
-    val name:        String,
-    val description: String,
-    val price:       Double,
-    val stock:       Int,
-    @SerializedName("is_active")   val isActive:   Boolean,
-    @SerializedName("category_id") val categoryId: Int,
-)
+    @GET("products/available/")
+    suspend fun getAvailable(): Response<PaginatedDto<ProductDto>>
 
-data class ProductStatsDto(
-    @SerializedName("total_active")   val totalActive:   Int,
-    @SerializedName("total_inactive") val totalInactive: Int,
-    @SerializedName("avg_price")      val avgPrice:      Double?,
-    @SerializedName("max_price")      val maxPrice:      Double?,
-    @SerializedName("min_price")      val minPrice:      Double?,
-    @SerializedName("total_stock")    val totalStock:    Int?,
-    @SerializedName("out_of_stock")   val outOfStock:    Int,
-)
+    @POST("products/")
+    suspend fun createProduct(@Body body: ProductRequestDto): Response<ProductDto>
 
-data class RestockResponseDto(
-    val id:          Int,
-    val name:        String,
-    @SerializedName("new_stock") val newStock: Int,
-)
+    @PATCH("products/{id}/")
+    suspend fun updateProduct(
+        @Path("id") id: Int,
+        @Body body: ProductRequestDto,
+    ): Response<ProductDto>
 
-data class RestockRequestDto(
-    val quantity: Int,
-)
+    @DELETE("products/{id}/")
+    suspend fun deleteProduct(@Path("id") id: Int): Response<Unit>
 
-// ── Mappers ───────────────────────────────────────────────────
+    @POST("products/{id}/restock/")
+    suspend fun restock(
+        @Path("id") id: Int,
+        @Body body: RestockRequestDto,
+    ): Response<RestockResponseDto>
 
-fun ProductDto.toDomain() = Product(
-    id           = id,
-    name         = name,
-    description  = description,
-    price        = price.toDoubleOrNull() ?: 0.0,
-    priceWithTax = priceWithTax,
-    stock        = stock,
-    inStock      = inStock,
-    isActive     = isActive,
-    imageUrl     = imageUrl,
-    categoryId   = category?.id,
-    categoryName = category?.name,
-    createdAt    = createdAt,
-    updatedAt    = updatedAt,
-)
+    @GET("products/stats/")
+    suspend fun getStats(): Response<ProductStatsDto>
 
-fun ProductPayload.toRequest() = ProductRequestDto(
-    name        = name,
-    description = description,
-    price       = price,
-    stock       = stock,
-    isActive    = isActive,
-    categoryId  = categoryId,
-)
+
+    @Multipart
+    @PATCH("products/{id}/")
+    suspend fun uploadProductImage(
+        @Path("id") id: Int,
+        @Part image: MultipartBody.Part,
+    ): Response<ProductDto>
+}
